@@ -5,13 +5,13 @@ let abilitiesCast = new Map();
 
 function updateAbilitiesCast(logLine, lineId) {
   if (lineId === 2) {
-    playerId = logLine[2];
+    playerId = logLine[2].toUpperCase();
   }
   else if ((lineId === 21) || (lineId === 22)) {
-    const [casterId, abilityId, targetId]= [logLine[2], parseInt(logLine[4], 16), logLine[6]];
-    if ((casterId != playerId) || (targetId[0] >= '4') || !trackedAbilities.includes(abilityId)) return;
+    const [casterId, abilityId, targetId]= [logLine[2].toUpperCase(), parseInt(logLine[4], 16), logLine[6].toUpperCase()];
+    if ((playerId != null && casterId != playerId) || (targetId[0] < '4') || !trackedAbilities.includes(abilityId)) return;
 
-    const [castTime, caster, castId, abilityName] = [new Date(), logLine[3], logLine[44], logLine[5]];
+    const [castTime, caster, castId, abilityName] = [new Date(), logLine[3], logLine[44].toUpperCase(), logLine[5]];
     abilitiesCast.set(castId, [castTime, caster, abilityId, abilityName]);
   }
   else if (lineId === 37) {
@@ -24,8 +24,6 @@ function runGhostbuster() {
   const keysToDelete = [];
   for (const [key, value] of abilitiesCast.entries()) {
     const elapsedTime = toUtcMs(new Date()) - toUtcMs(value[0]);
-          const str = `${value[3]} has been ghosted.`
-      console.log(str);
     if (elapsedTime >= 2000) {
       keysToDelete.push(key);
       const str = `${value[3]} has been ghosted.`
