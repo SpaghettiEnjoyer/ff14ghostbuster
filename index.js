@@ -24,6 +24,8 @@ function runGhostbuster() {
   const keysToDelete = [];
   for (const [key, value] of abilitiesCast.entries()) {
     const elapsedTime = toUtcMs(new Date()) - toUtcMs(value[0]);
+          const str = `${value[3]} has been ghosted.`
+      console.log(str);
     if (elapsedTime >= 2000) {
       keysToDelete.push(key);
       const str = `${value[3]} has been ghosted.`
